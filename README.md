@@ -9,8 +9,12 @@ of them reflect community discussions or will (should?) turn into
 [FLIPs](https://cwiki.apache.org/confluence/display/FLINK/Flink+Improvement+Proposals)
 (Flink Improvement Proposals). The posts are in reverse chronological order.
 
+There is also a (probably incomplete) list of my past
+[talks/publications](https://github.com/aljoscha/blog/blob/master/publications.md).
+
 Yes, this is a Github repository, you can follow it to receive updates or open
 pull requests if you want to fix something.
+
 
 ---
 
