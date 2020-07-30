@@ -127,7 +127,7 @@ Let's look at the dependency structure of these modules. Both `flink-core` and
 `flink-java` are user-facing parts of the SDK, `flink-runtime`,
 `flink-optimizer`, and `flink-clients` contain the runtime code:
 
-<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/master/assets/original-sin/dataset-dependency-structure.png">
+<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/main/assets/original-sin/dataset-dependency-structure.png">
 
 In this and the following figures that show dependency graphs a pointed arrow
 _foo -> bar_ means that module _foo_ depends on module _bar_.
@@ -146,7 +146,7 @@ When it is time to execute a graph of `Operators`, Flink will first translate
 to a `Plan`, then to an `OptimizedPlan`, and finally to a `JobGraph`. Different
 optimizations or transformations can happen in the different stages:
 
-<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/master/assets/original-sin/dataset-translation.png">
+<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/main/assets/original-sin/dataset-translation.png">
 
 The [appendix](#appendix-a-dataset-transformations) has slightly more details
 on this process but they are not pertinent to what I'm trying to get across
@@ -172,7 +172,7 @@ The dependency structure is simpler. Both `flink-core` and
 `flink-streaming-java` contain the actual user-facing parts of the SDK while
 `flink-runtime` and `flink-clients` are runtime modules:
 
-<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/master/assets/original-sin/datastream-dependency-structure.png">
+<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/main/assets/original-sin/datastream-dependency-structure.png">
 
 The problem is that `flink-runtime` is a direct dependency of
 `flink-streaming-java`. This means that users of our API/SDK will "see" all the
@@ -187,7 +187,7 @@ DataSet API has. The runtime operator implementations reside in
 `DataStream`, this immediately instantiates the runtime operator for a map
 operation. There are still some translation steps, but it works differently:
 
-<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/master/assets/original-sin/datastream-translation.png">
+<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/main/assets/original-sin/datastream-translation.png">
 
 The `StreamGraph` is a legacy artifact and doesn't have any structure or
 information that is different form the graph of `Transformations`. We have only
@@ -306,7 +306,7 @@ it will give the users more security when using sanctioned stable APIs.
 Once we are done with everything, the module structure will probably look
 something like this:
 
-<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/master/assets/original-sin/long-term-dependency-structure.png">
+<img width="70%" height="70%" src="https://github.com/aljoscha/blog/blob/main/assets/original-sin/long-term-dependency-structure.png">
 
 We will have `flink-core`, `flink-java`, and `flink-streaming` as the user-facing
 parts of the SDK. They don't depend on any runtime modules, instead all the
