@@ -10,7 +10,7 @@ of them reflect community discussions or will (should?) turn into
 (Flink Improvement Proposals). The posts are in reverse chronological order.
 
 There is also a (probably incomplete) list of my past
-[talks/publications](https://github.com/aljoscha/blog/blob/main/publications.md).
+[talks/publications](publications.md).
 
 Yes, this is a Github repository, you can follow it to receive updates or open
 pull requests if you want to fix something.
@@ -20,4 +20,4 @@ pull requests if you want to fix something.
 
 | topics | date | title |
 |:-------|:-----|:------|
-| Flink | 2020-07-06 | [On Structuring and Maintaining a Large Code Base (Apache Flink)](https://github.com/aljoscha/blog/blob/main/posts/2020-07-06-structuring-large-code-base.md)
+| Flink | 2020-07-06 | [On Structuring and Maintaining a Large Code Base (Apache Flink)](posts/2020-07-06-structuring-large-code-base.md)
