@@ -20,4 +20,5 @@ pull requests if you want to fix something.
 
 | topics | date | title |
 |:-------|:-----|:------|
+| Flink Statefun, Rust | 2020-10-01 | [Introducing the Rust SDK for Apache Flink Stateful Functions](posts/2020-10-01-intro-rust-sdk.md)
 | Flink | 2020-07-06 | [On Structuring and Maintaining a Large Code Base (Apache Flink)](posts/2020-07-06-structuring-large-code-base.md)
