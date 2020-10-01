@@ -16,11 +16,6 @@ intersection of reasons that make this interesting:
  - this will allow me to setup a "neat" new project with proper CI integration,
    all the fancy build tooling, automatic formatting, etc.
 
-~~In this post I will first describe what is Apache Flink Statefun, then I will
-explain what is necessary when writing an SDK for it in a new language. After
-that I will go into some details of the Rust SDK implementation and then try
-and convince you to also write an SDK for Statefun in a new language.~~
-
 The Rust SDK is available as a [Github
 Project](https://github.com/aljoscha/statefun-rust) but it might be best to
 first read this post to get an overview of the different components before
