@@ -2,6 +2,7 @@ A (probably incomplete) list of my talks and other publications.
 
 # Talks & Presentations
 
+* [The Long Road Towards Unified APIs in Apache Flink](https://2020.jnation.pt/talks/the-long-road-towards-unified-apis-in-apache-flink/) ([video](https://www.youtube.com/watch?v=ANJm1TE3d-M)), JNation 2020, Online, June 2020
 * [Towards Flink 2.0: Unified Batch & Stream Processing
 ](https://europe-2019.flink-forward.org/conference-program#towards-flink------unified-batch---stream-processing) ([slides](https://www.slideshare.net/FlinkForward/towards-flink-20-unified-batch-stream-processing-aljoscha-krettek-ververica-185815165), [video](https://www.youtube.com/watch?v=WLlkQApBz4Y)), Flink Forward Berlin 2019, Berlin, Germany, October 2019
 * [Towards Flink 2.0: Rethinking the stack and APIs to unify Batch & Stream](https://sf-2019.flink-forward.org/conference-program#towards-flink-2-0--rethinking-the-stack-and-apis-to-unify-batch---stream) ([slides](https://www.slideshare.net/FlinkForward/flink-forward-san-francisco-2019-towards-flink-20-rethinking-the-stack-and-apis-to-unify-batch-stream-stephan-ewen-aljoscha-krettek), [video](https://player.vimeo.com/video/329884635)), Flink Forward San Francisco 2019, San Francisco, USA, April 2019
