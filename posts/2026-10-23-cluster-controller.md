@@ -172,7 +172,7 @@ the architecture will also work in a horizontal-scaling world.
 The overall approach to vertical scalability is simple: extract as much work
 out of the central processing loop into independent "tasks" (in this case,
 `async` Rust tasks). Put in place a minimal interface/boundary between these
-tasks and the controller loop.
+tasks and the Coordinator loop.
 
 Putting that into practice with the cluster controller meant that we had to do
 roughly these things:
@@ -190,7 +190,10 @@ Now, processing the SQL statement only requires writing down the intent in our
 durable catalog, and then the cluster controller reads those in the background,
 figures out what to do and sends messages to the Coordinator when needed.
 
-TODO: generate figure for the architecture of Coordinator, controller, and the messages.
+![Cluster controller and Coordinator request/reply architecture](../assets/cluster-controller/architecture.svg)
+
+
+TODO: we also added more background tasks like this now, for the example the thing that writes down hydration history. Please look at that, and write me a short paragraph that highlights how we've added more like this, and that the approach has panned out well so far.
 
 ## Links
 

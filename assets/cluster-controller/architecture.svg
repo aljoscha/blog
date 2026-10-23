@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+<title id="title">Cluster reconciliation outside the Coordinator loop</title>
+<desc id="desc">Inside environmentd, an independent cluster controller task reads state and live signals through request and reply messages to the Coordinator. Pure strategies compute desired replicas and guarded decisions. The Coordinator commits changes to the durable catalog only if the expected state still matches. Committed changes flow through compute and storage controllers to clusterd replicas, which report live status.</desc>
+<defs>
+ <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#475569" stroke-width="1.5"/></marker>
+ <style>
+ text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill:#172b40; }
+ .title { font-size:28px; font-weight:700; }
+ .heading { font-size:23px; font-weight:650; }
+ .body { font-size:18px; }
+ .small { font-size:16px; fill:#475569; }
+ .label { font-size:16px; font-weight:550; }
+ .edge { fill:none; stroke:#475569; stroke-width:2; marker-end:url(#arrow); }
+ .reply { fill:none; stroke:#475569; stroke-width:2; stroke-dasharray:6 5; marker-end:url(#arrow); }
+ </style>
+</defs>
+<rect width="1280" height="900" fill="#fff"/>
+<text x="50" y="54" class="title">Cluster reconciliation outside the Coordinator loop</text>
+<rect x="825" y="83" width="355" height="57" rx="12" fill="#f1f5f9" stroke="#94a3b8"/>
+<text x="1002" y="118" class="body" text-anchor="middle">SQL client: CREATE / ALTER CLUSTER</text>
+<rect x="30" y="165" width="1220" height="547" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="52" y="198" class="small">environmentd · one process, separate async tasks</text>
+<path d="M1002 140 V226" class="edge"/>
+<rect x="80" y="230" width="400" height="275" rx="14" fill="#eef2ff" stroke="#818cf8" stroke-width="2"/>
+<text x="105" y="267" class="heading">Cluster controller task</text>
+<text x="105" y="296" class="small">Wake on timer or catalog change</text>
+<text x="105" y="334" class="body">Pure strategies</text>
+<rect x="105" y="350" width="156" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
+<text x="183" y="374" class="small" text-anchor="middle">Baseline</text>
+<rect x="273" y="350" width="182" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
+<text x="364" y="374" class="small" text-anchor="middle">Graceful resize</text>
+<rect x="105" y="395" width="156" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
+<text x="183" y="419" class="small" text-anchor="middle">Hydration burst</text>
+<rect x="273" y="395" width="182" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
+<text x="364" y="419" class="small" text-anchor="middle">ON REFRESH</text>
+<text x="105" y="464" class="body">Combine strategies, diff replica sets</text>
+<text x="105" y="489" class="small">Emit state updates + replica creates / drops</text>
+<rect x="825" y="230" width="355" height="275" rx="14" fill="#eaf7f5" stroke="#48a89c" stroke-width="2"/>
+<text x="850" y="267" class="heading">Coordinator loop</text>
+<text x="850" y="310" class="body">Validate SQL and persist intent</text>
+<text x="850" y="347" class="body">Serve state and signal requests</text>
+<text x="850" y="384" class="body">Check expected state atomically</text>
+<text x="850" y="421" class="body">Commit or reject decisions</text>
+<text x="850" y="471" class="small">Catalog mutations stay here</text>
+<path d="M480 263 H821" class="edge"/>
+<text x="652" y="250" text-anchor="middle" class="label">Read state + live signals</text>
+<path d="M825 329 H484" class="reply"/>
+<text x="652" y="316" text-anchor="middle" class="label">Snapshots + readiness</text>
+<path d="M480 401 H821" class="edge"/>
+<text x="652" y="388" text-anchor="middle" class="label">Apply decisions + expected state</text>
+<path d="M825 477 H484" class="reply"/>
+<text x="652" y="464" text-anchor="middle" class="label">Applied / rejected</text>
+<rect x="825" y="591" width="355" height="85" rx="12" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
+<text x="1002" y="624" text-anchor="middle" class="heading">Durable catalog</text>
+<text x="1002" y="653" text-anchor="middle" class="small">Intent + reconfiguration / burst state</text>
+<path d="M1002 509 V587" class="edge" marker-start="url(#arrow)"/>
+<text x="1018" y="550" class="small">Read / transact</text>
+<rect x="80" y="591" width="400" height="85" rx="12" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
+<text x="280" y="624" text-anchor="middle" class="heading">Compute + storage controllers</text>
+<text x="280" y="653" text-anchor="middle" class="small">Replica lifecycle + live status</text>
+<path d="M865 509 V547 H280 V587" class="edge" marker-start="url(#arrow)"/>
+<rect x="402" y="529" width="357" height="30" rx="5" fill="#f8fafc"/>
+<text x="580" y="550" text-anchor="middle" class="label">Committed changes / live status</text>
+<path d="M280 680 V786" class="edge" marker-start="url(#arrow)"/>
+<text x="298" y="751" class="small">Commands / progress</text>
+<rect x="80" y="790" width="400" height="65" rx="12" fill="#fff7ed" stroke="#d6a262" stroke-width="2"/>
+<text x="280" y="830" text-anchor="middle" class="heading">clusterd replicas · data plane</text>
+<text x="825" y="757" class="small">The controller pulls fresh inputs each tick.</text>
+<text x="825" y="784" class="small">If intent changed, stale decisions are rejected</text>
+<text x="825" y="811" class="small">and recomputed on a later tick.</text>
+</svg>
