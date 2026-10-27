@@ -1,10 +1,10 @@
 # A modular cluster controller for burst autoscaling and graceful reconfiguration
 
 We recently added a bundle of new cluster features: burst autoscaling and
-graceful reconfiguration. I will explain these below by way of example, but to
-me the more exciting thing is that we managed to add these _and_ improve how
-our control plane is architected. Which latter I will explain after we first
-explore the examples.
+background graceful reconfiguration. I will explain these below by way of
+example, but to me the more exciting thing is that we managed to add these
+_and_ improve how our control plane is architected. Which latter I will explain
+after we first explore the examples.
 
 ## Burst Autoscaling
 
@@ -189,6 +189,27 @@ background tasks and then require processing time on the main loop again.
 Now, processing the SQL statement only requires writing down the intent in our
 durable catalog, and then the cluster controller reads those in the background,
 figures out what to do and sends messages to the Coordinator when needed.
+
+The cluster controller itself is a "reconciler". It runs its own loop, and on
+every tick, it checks the current state: clusters, replicas, configured
+autoscaling strategies, in-progress graceful reconfigurations. From that, it
+determines state updates that _should_ be applied, think creating replicas,
+retiring old-size replicas, retiring burst replicas. The controller then tries
+to apply those updates by sending a message to the coordinator that contains a
+"witness" of the catalog state as of which it did its decicions, and the
+Coordinator either applies those or rejects if the state of affected clusters
+or replicas has changed in between.
+
+This design allows the cluster controller to be modular and separate from the
+Coordinator. And it would also allow running multiple instances of it, as long
+as everyone follows the same rules for deriving _ought_ from _is_. And the
+system is self healing in the sense that it will eventually converge to the
+state that it should have.
+
+Additionaly, the separation via a minimal interface allows testing cluster
+controller behavior in isolation, and will enable us to swap out the
+communication channel between Coordinator and cluster controller when we have
+to, for our work on horizontal scalability.
 
 ![Cluster controller and Coordinator request/reply architecture](../assets/cluster-controller/architecture.svg)
 
