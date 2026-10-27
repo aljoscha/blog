@@ -192,13 +192,13 @@ figures out what to do and sends messages to the Coordinator when needed.
 
 The cluster controller itself is a "reconciler". It runs its own loop, and on
 every tick, it checks the current state: clusters, replicas, configured
-autoscaling strategies, in-progress graceful reconfigurations. From that, it
-determines state updates that _should_ be applied, think creating replicas,
-retiring old-size replicas, retiring burst replicas. The controller then tries
-to apply those updates by sending a message to the coordinator that contains a
-"witness" of the catalog state as of which it did its decicions, and the
-Coordinator either applies those or rejects if the state of affected clusters
-or replicas has changed in between.
+autoscaling strategies, in-progress graceful reconfigurations and hydration
+signals. From that, it determines state updates that _should_ be applied, think
+creating replicas, retiring old-size replicas, retiring burst replicas. The
+controller then tries to apply those updates by sending a message to the
+coordinator that contains a "witness" of the catalog state as of which it did
+its decicions, and the Coordinator either applies those or rejects if the state
+of affected clusters or replicas has changed in between.
 
 This design allows the cluster controller to be modular and separate from the
 Coordinator. And it would also allow running multiple instances of it, as long
@@ -215,6 +215,14 @@ to, for our work on horizontal scalability.
 
 
 TODO: we also added more background tasks like this now, for the example the thing that writes down hydration history. Please look at that, and write me a short paragraph that highlights how we've added more like this, and that the approach has panned out well so far.
+
+Since we finished this work, we've used a similar approach for collecting
+hydration history. A background task periodically reads hydration information
+from replicas, and writes them down through a client interface to the
+Coordinator. Both collection and regular cleaning up of old data can stay of
+the Coordinator main loop, while using the same concurrency-control mechanisms
+that we use for regular table writes. So far, this has been a fruitful way to
+expand control-plane functionality while containing complexity.
 
 ## Links
 
