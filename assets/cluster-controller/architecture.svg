@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
 <title id="title">Cluster reconciliation outside the Coordinator loop</title>
-<desc id="desc">Inside environmentd, an independent cluster controller task reads state and live signals through request and reply messages to the Coordinator. Pure strategies compute desired replicas and guarded decisions. The Coordinator commits changes to the durable catalog only if the expected state still matches. Committed changes flow through compute and storage controllers to clusterd replicas, which report live status.</desc>
+<desc id="desc">Inside environmentd, an independent cluster controller task reads state and live signals through request and reply messages to the Coordinator. The task computes desired changes and sends decisions with a witness of the state it read. The Coordinator commits changes to the durable catalog only if the expected state still matches. Committed changes flow through compute and storage controllers to clusterd replicas, which report live status.</desc>
 <defs>
  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#475569" stroke-width="1.5"/></marker>
  <style>
@@ -24,17 +24,10 @@
 <rect x="80" y="230" width="400" height="275" rx="14" fill="#eef2ff" stroke="#818cf8" stroke-width="2"/>
 <text x="105" y="267" class="heading">Cluster controller task</text>
 <text x="105" y="296" class="small">Wake on timer or catalog change</text>
-<text x="105" y="334" class="body">Pure strategies</text>
-<rect x="105" y="350" width="156" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
-<text x="183" y="374" class="small" text-anchor="middle">Baseline</text>
-<rect x="273" y="350" width="182" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
-<text x="364" y="374" class="small" text-anchor="middle">Graceful resize</text>
-<rect x="105" y="395" width="156" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
-<text x="183" y="419" class="small" text-anchor="middle">Hydration burst</text>
-<rect x="273" y="395" width="182" height="35" rx="7" fill="#fff" stroke="#c7d2fe"/>
-<text x="364" y="419" class="small" text-anchor="middle">ON REFRESH</text>
-<text x="105" y="464" class="body">Combine strategies, diff replica sets</text>
-<text x="105" y="489" class="small">Emit state updates + replica creates / drops</text>
+<text x="105" y="347" class="body">Observe state and readiness</text>
+<text x="105" y="384" class="body">Compute desired changes</text>
+<text x="105" y="421" class="body">Send decisions with a state witness</text>
+<text x="105" y="471" class="small">Recompute when state changes</text>
 <rect x="825" y="230" width="355" height="275" rx="14" fill="#eaf7f5" stroke="#48a89c" stroke-width="2"/>
 <text x="850" y="267" class="heading">Coordinator loop</text>
 <text x="850" y="310" class="body">Validate SQL and persist intent</text>

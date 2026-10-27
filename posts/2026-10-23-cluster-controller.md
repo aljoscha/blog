@@ -158,13 +158,12 @@ Instead, what we did is take a step back, think holistically about what the
 
 ## Cluster Controller
 
-The long-term vision for the control plane requires that `environmentd` (or
-it's replacement processes) be both vertically and horizontally scalable.
-Vertically scalable meaning that we can do more useful work when giving it more
-CPU cores. So handling larger query workloads, larger numbers of objects and
-clusters, etc. And horizontal scalable meaning that we can have multiple
-processes coordinating and sharing the control plane workload for a given
-environment.
+The long-term vision for the control plane requires that `environmentd` (or its
+replacement processes) be both vertically and horizontally scalable. Vertically
+scalable meaning that we can do more useful work when giving it more CPU cores.
+So handling larger query workloads, larger numbers of objects and clusters,
+etc. And horizontal scalable meaning that we can have multiple processes
+coordinating and sharing the control plane workload for a given environment.
 
 In our work here, we focused on vertical scalability, while making sure that
 the architecture will also work in a horizontal-scaling world.
@@ -177,7 +176,7 @@ tasks and the Coordinator loop.
 Putting that into practice with the cluster controller meant that we had to do
 roughly these things:
 
-1. Add the SQL surface for creating auto scaling strategies and kicking of
+1. Add the SQL surface for creating auto scaling strategies and kicking off
    cluster reconfigurations.
 2. Add commands and responses that the controller sends to the Coordinator.
 3. Add the new cluster controller that enacts things from #1.
@@ -197,32 +196,36 @@ signals. From that, it determines state updates that _should_ be applied, think
 creating replicas, retiring old-size replicas, retiring burst replicas. The
 controller then tries to apply those updates by sending a message to the
 coordinator that contains a "witness" of the catalog state as of which it did
-its decicions, and the Coordinator either applies those or rejects if the state
-of affected clusters or replicas has changed in between.
+its decisions, and the Coordinator atomically either applies those or rejects
+if the state of affected clusters or replicas has changed in between.
 
 This design allows the cluster controller to be modular and separate from the
 Coordinator. And it would also allow running multiple instances of it, as long
-as everyone follows the same rules for deriving _ought_ from _is_. And the
-system is self healing in the sense that it will eventually converge to the
-state that it should have.
+as everyone follows the same rules for deriving _ought_ from _is_ and the
+Coordinator prevents stale decisions from being applied. The system is self
+healing in the sense that it will eventually converge to the state that it
+should have.
 
-Additionaly, the separation via a minimal interface allows testing cluster
+Additionally, the separation via a minimal interface allows testing cluster
 controller behavior in isolation, and will enable us to swap out the
 communication channel between Coordinator and cluster controller when we have
 to, for our work on horizontal scalability.
 
-![Cluster controller and Coordinator request/reply architecture](../assets/cluster-controller/architecture.svg)
+All of the above is lovingly handwritten by me, but the LLMs are much faster at
+creating figures, so here is one bit of generated figure that summarizes the
+work, for your enjoyment:
 
-
-TODO: we also added more background tasks like this now, for the example the thing that writes down hydration history. Please look at that, and write me a short paragraph that highlights how we've added more like this, and that the approach has panned out well so far.
+![Cluster controller and Coordinator request/reply
+architecture](../assets/cluster-controller/architecture.svg)
 
 Since we finished this work, we've used a similar approach for collecting
 hydration history. A background task periodically reads hydration information
-from replicas, and writes them down through a client interface to the
-Coordinator. Both collection and regular cleaning up of old data can stay of
+from replicas and writes them down through a client interface to the
+Coordinator. Both collection and regular cleaning up of old data can stay off
 the Coordinator main loop, while using the same concurrency-control mechanisms
 that we use for regular table writes. So far, this has been a fruitful way to
-expand control-plane functionality while containing complexity.
+expand control-plane functionality while containing complexity. See the list of
+links right below for this work, if you're curious.
 
 ## Links
 
@@ -233,6 +236,8 @@ expand control-plane functionality while containing complexity.
 - [Docs: Autoscaling for hydration](https://materialize.com/docs/clusters/autoscaling/)
 - [Docs: Cluster resizing](https://materialize.com/docs/sql/alter-cluster/#resizing)
 - [Docs: SHOW CLUSTERS](https://materialize.com/docs/sql/show-clusters/)
+- [Background collection of durable object hydration history (#38347)](https://github.com/MaterializeInc/materialize/pull/38347)
+- [Durable replica hydration history (#38512)](https://github.com/MaterializeInc/materialize/pull/38512)
 
 For readers interested in the shared controller architecture:
 
